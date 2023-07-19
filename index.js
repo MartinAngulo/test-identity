@@ -1,6 +1,7 @@
 const express = require("express");
+require("dotenv").config();
 const { DefaultAzureCredential } = require("@azure/identity");
-const { SecretClient } = require("@azure/keyvault-certificates");
+const { CertificateClient } = require("@azure/keyvault-certificates");
 
 const app = express();
 
@@ -13,7 +14,7 @@ app.get("/", async (req, res) => {
     const credential = new DefaultAzureCredential();
 
     // Create an instance of SecretClient
-    const client = new SecretClient(vaultUrl, credential);
+    const client = new CertificateClient(vaultUrl, credential);
 
     const certificateName = "sig-keys";
 
@@ -30,4 +31,6 @@ app.get("/", async (req, res) => {
   }
 });
 
-app.listen(3000, () => console.log("Example app is listening on port 3000."));
+app.listen(process.env.PORT || 3000, () =>
+  console.log("Example app is listening on port 3000.")
+);
